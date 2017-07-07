@@ -3,7 +3,6 @@
 import re
 import logging
 from os import popen
-from random import randint
 from sys import stderr
 
 logging.basicConfig(level=logging.DEBUG,
@@ -42,21 +41,20 @@ class SSHCheck:
     def root(self):
         if self._sshd["permitrootlogin"] != "no":
             self._log.error(
-                "You should not use root account. Set PermitRootLogin to no please.")
+                "No use root account.")
 
     def port(self):
         if self._sshd['port'] == '22':
-            self._log.error("Port number should not be the default (22). Set Port to other please. For example: {}".format(
-                randint(5000, 65535)))
+            self._log.error("Port number should not be the default (22).")
 
     def logingracetime(self):
         if int(self._sshd["logingracetime"]) > 25:
             self._log.error(
-                "LoginGraceTime is very high, if you do not need so much, reduce the value of this variable.")
+                "LoginGraceTime is very high.")
 
     def passauthentication(self):
         if self._sshd["passwordauthentication"] == 'yes' or self._sshd["challengeresponseauthentication"] == 'yes':
-            self._log.error("You should disable keyboard-interactive and use ssh keys instead (or convine it, for example ssh keys + OTP codes). Make sure than PasswordAuthentication and ChallengeResponseAuthentication is both disabled.")
+            self._log.error("Disable keyboard-interactive and use ssh keys instead (or convine it, for example ssh keys + OTP codes). Make sure than PasswordAuthentication and ChallengeResponseAuthentication is both disabled.")
 
     def TFA(self):
         with open("/etc/pam.d/sshd", 'r') as f:
@@ -68,12 +66,12 @@ class SSHCheck:
             "\s*auth\s*(optional|sufficient)\s*pam_google_authenticator.so*", sshd_pam)
         if opt_or_suff is not None:
             self._log.error(
-                "You should not use {} option in /etc/pam.d/sshd.".format(opt_or_suff.group()))
+                "Not use {} option in /etc/pam.d/sshd.".format(opt_or_suff.group()))
 
     def login_filter(self):
         if (not "allowusers" in self._sshd.getOptions()) or (not "allowgroups" in self._sshd.getOptions()):
             self._log.error(
-                "Filter users/groups with AllowUSers, AllowGroups.")
+                "Filter users/groups with AllowUSers, and/or, AllowGroups.")
 
     def subsystem(self):
         if "subsystem" in self._sshd.getOptions():
