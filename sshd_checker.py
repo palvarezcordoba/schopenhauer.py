@@ -2,7 +2,7 @@
 
 import re
 import logging
-from os import popen
+from os import popen,path
 from sys import stderr
 
 logging.basicConfig(level=logging.DEBUG,
@@ -88,10 +88,14 @@ class SSHCheck:
                     self._log.error("{} - {}".format(item_cleared[0][:-1], item_cleared[1][:-1]))
                     break
 
+    def fail2ban(self):
+        if not path.exists("/usr/bin/fail2ban-server"):
+            self._log.error("Fail2ban not installed.")
+
 if __name__ == "__main__":
     checker = SSHCheck()
     __all__ = [checker.root, checker.port, checker.logingracetime,
             checker.passauthentication, checker.TFA, checker.login_filter,
-            checker.subsystem, checker.algorithm]
+            checker.subsystem, checker.algorithm, checker.fail2ban]
 
     [x() for x in __all__]
