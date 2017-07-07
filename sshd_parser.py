@@ -14,3 +14,5 @@ class SSHConf:
                 pass
     def __getitem__(self, x):
         return self.confdict[x]
+    def getOptions(self):
+        return self.confdict.keys()
