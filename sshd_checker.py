@@ -85,7 +85,7 @@ class SSHCheck:
             item_cleared = item.split(' ', 1)
             for x in self._sshd.conf:
                 if item_cleared[0] in x[1]:
-                    self._log.error("{} - {}".format(*item_cleared))
+                    self._log.error("{} - {}".format(item_cleared[0][:-1], item_cleared[:-1]))
                     break
 
 if __name__ == "__main__":
