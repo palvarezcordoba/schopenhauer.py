@@ -78,10 +78,10 @@ class SSHCheck:
             self._log.error("If you not really need {} disable it.".format(
                 self._sshd["subsystem"]))
 
+if __name__ == "__main__":
+    checker = SSHCheck()
+    __all__ = [checker.root, checker.port, checker.logingracetime,
+            checker.passauthentication, checker.TFA, checker.login_filter,
+            checker.subsystem]
 
-checker = SSHCheck()
-__all__ = [checker.root, checker.port, checker.logingracetime,
-           checker.passauthentication, checker.TFA, checker.login_filter,
-           checker.subsystem]
-
-[x() for x in __all__]
+    [x() for x in __all__]
