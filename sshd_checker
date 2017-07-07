@@ -59,7 +59,7 @@ class SSHCheck:
     def TFA(self):
         with open("/etc/pam.d/sshd", 'r') as f:
             sshd_pam = f.read()
-        if re.match("\s*auth\s*required\s*pam_google_authenticator.so*", sshd_pam):
+        if not re.match("\s*auth\s*required\s*pam_google_authenticator.so*", sshd_pam):
             self._log.error("It is recommended use 2FA.")
             return 0
         opt_or_suff = re.match(
