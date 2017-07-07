@@ -41,7 +41,7 @@ class SSHCheck:
     def root(self):
         if self._sshd["permitrootlogin"] != "no":
             self._log.error(
-                "No use root account.")
+                "Disable root login.")
 
     def port(self):
         if self._sshd['port'] == '22':
