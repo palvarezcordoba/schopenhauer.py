@@ -69,7 +69,7 @@ class SSHCheck:
                 "Not use {} option in /etc/pam.d/sshd.".format(opt_or_suff.group()))
 
     def login_filter(self):
-        if (not "allowusers" in self._sshd.getOptions()) or (not "allowgroups" in self._sshd.getOptions()):
+        if not ("allowusers" in self._sshd.getOptions()) or ("allowgroups" in self._sshd.getOptions()):
             self._log.error(
                 "Filter users/groups with AllowUSers, and/or, AllowGroups.")
 
