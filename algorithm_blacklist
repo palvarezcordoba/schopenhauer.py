@@ -1,0 +1,7 @@
+ecdh-sha2-nistp256 weak eliptic curves
+ecdh-sha2-nistp384 weak eliptic curves
+ecdh-sha2-nistp521 weak eliptic curves
+diffie-hellman-group14-sha1 weak hash algorithm
+ecdsa-sha2-nistp256 weak eliptic curves
+hmac-sha1 weak hash algorithm
+hmac-sha1-etm@openssh.com weak hash algorithm
