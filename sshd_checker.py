@@ -78,10 +78,20 @@ class SSHCheck:
             self._log.error("If you not really need {} disable it.".format(
                 self._sshd["subsystem"]))
 
+    def algorithm(self):
+        with open("algorithm_blacklist", 'r') as f:
+            blacklist = f.readlines()
+        for item in blacklist:
+            item_cleared = item.split(' ', 1)
+            for x in self._sshd.conf:
+                if item_cleared[0] in x[1]:
+                    self._log.error("{} - {}".format(*item_cleared))
+                    break
+
 if __name__ == "__main__":
     checker = SSHCheck()
     __all__ = [checker.root, checker.port, checker.logingracetime,
             checker.passauthentication, checker.TFA, checker.login_filter,
-            checker.subsystem]
+            checker.subsystem, checker.algorithm]
 
     [x() for x in __all__]
