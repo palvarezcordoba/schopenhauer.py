@@ -4,6 +4,7 @@ import sshd_parser
 import re
 from os import popen
 from random import randint
+from sys import stderr
 
 with popen("/usr/sbin/sshd -T") as p:
     sshd_config = p.read()
