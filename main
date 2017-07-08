@@ -1,3 +1,3 @@
 #!/bin/sh
 
-[ "$(pgrep sshd)" != "" ] && ./sshd_check || echo "[INFO] SSH service is not running, I will not check it"
+[ "$(pgrep sshd)" != "" ] && ./sshd_checker || echo "[INFO] SSH service is not running, I will not check it"
