@@ -84,9 +84,10 @@ class SSHCheck:
         for item in blacklist:
             item_cleared = item.split(' ', 1)
             for x in self._sshd.conf:
-                if item_cleared[0] in x[1]:
-                    self._log.error("{} - {}".format(item_cleared[0][:-1], item_cleared[1][:-1]))
-                    break
+                if len(x) > 1:
+                    if item_cleared[0] in x[1]:
+                        self._log.error("{} - {}".format(item_cleared[0][:-1], item_cleared[1][:-1]))
+                        break
 
     def fail2ban(self):
         if not path.exists("/usr/bin/fail2ban-server"):
