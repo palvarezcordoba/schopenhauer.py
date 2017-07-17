@@ -95,8 +95,15 @@ class SSHCheck:
 
 if __name__ == "__main__":
     checker = SSHCheck()
-    __all__ = [checker.root, checker.port, checker.logingracetime,
-            checker.passauthentication, checker.TFA, checker.login_filter,
-            checker.subsystem, checker.algorithm, checker.fail2ban]
+    __all__ = {'root': checker.root, 'port': checker.port, 'logingracetime': checker.logingracetime,
+            'passauthentication': checker.passauthentication, 'TFA': checker.TFA, 'login_filter': checker.login_filter,
+            'subsystem': checker.subsystem, 'algorithm': checker.algorithm, 'fail2ban': checker.fail2ban}
+    with open("excludes", 'r') as f:
+        conf = f.read()
+        funcs = re.findall("""[\n]?[^#].*?=.*?false""", conf)
+        for x in funcs:
+            func = x.split()[0]
+            del(__all__[func])
 
-    [x() for x in __all__]
+    for x in sorted(__all__):
+        __all__[x]()
