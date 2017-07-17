@@ -100,7 +100,8 @@ if __name__ == "__main__":
             'subsystem': checker.subsystem, 'algorithm': checker.algorithm, 'fail2ban': checker.fail2ban}
     with open("excludes", 'r') as f:
         conf = f.read()
-        funcs = re.findall("""[\n]?[^#].*?=.*?false""", conf)
+        pattern = re.compile("""[\n]?[^#].*?=.*?false""", re.IGNORECASE)
+        funcs = re.findall(pattern, conf)
         for x in funcs:
             func = x.split()[0]
             del(__all__[func])
