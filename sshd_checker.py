@@ -7,8 +7,10 @@ from sys import stderr
 
 import helpers
 
-logging.basicConfig(level=logging.DEBUG,
-                    format="[%(levelname)s::%(name)s] %(message)s")
+CHECKER_NAME = "SSH"
+
+logging.basicConfig(format="[%(name)s] %(message)s")
+log = logging.getLogger(CHECKER_NAME)
 
 
 class SSHConf(object):
@@ -38,46 +40,44 @@ class SSHCheck(object):
         with popen("/usr/sbin/sshd -T") as p:
             sshd_config = p.read()
         self._sshd = SSHConf(sshd_config)
-        self._log = logging.getLogger(self.__class__.__name__)
 
     def root(self):
         if self._sshd["permitrootlogin"] != "no":
-            self._log.error(
-                "Disable root login.")
+            log.error("Disable root login.")
 
     def port(self):
         if self._sshd['port'] == '22':
-            self._log.error("Port number should not be the default (22).")
+            log.error("Port number should not be the default (22).")
 
     def logingracetime(self):
         if int(self._sshd["logingracetime"]) > 25:
-            self._log.error(
+            log.error(
                 "LoginGraceTime is very high.")
 
     def passauthentication(self):
         if self._sshd["passwordauthentication"] == 'yes' or self._sshd["challengeresponseauthentication"] == 'yes':
-            self._log.error("Disable keyboard-interactive and use ssh keys instead (or combine it, for example ssh keys + OTP codes). Make sure than PasswordAuthentication and ChallengeResponseAuthentication is both disabled.")
+            log.error("Disable keyboard-interactive and use ssh keys instead (or combine it, for example ssh keys + OTP codes). Make sure than PasswordAuthentication and ChallengeResponseAuthentication is both disabled.")
 
     def TFA(self):
         with open("/etc/pam.d/sshd", 'r') as f:
             sshd_pam = f.read()
         if not re.match("\s*auth\s*required\s*pam_google_authenticator.so*", sshd_pam):
-            self._log.error("It is recommended use 2FA.")
+            log.error("It is recommended use 2FA.")
             return 0
         opt_or_suff = re.match(
             "\s*auth\s*(optional|sufficient)\s*pam_google_authenticator.so*", sshd_pam)
         if opt_or_suff is not None:
-            self._log.error(
+            log.error(
                 "Not use {} option in /etc/pam.d/sshd.".format(opt_or_suff.group()))
 
     def login_filter(self):
         if not ("allowusers" in self._sshd.getOptions()) or ("allowgroups" in self._sshd.getOptions()):
-            self._log.error(
+            log.error(
                 "Filter users/groups with AllowUSers, and/or, AllowGroups.")
 
     def subsystem(self):
         if "subsystem" in self._sshd.getOptions():
-            self._log.error("If you not really need {} disable it.".format(
+            log.error("If you not really need {} disable it.".format(
                 self._sshd["subsystem"]))
 
     def algorithm(self):
@@ -88,18 +88,18 @@ class SSHCheck(object):
             for x in self._sshd.conf:
                 if len(x) > 1:
                     if item_cleared[0] in x[1]:
-                        self._log.error(
+                        log.error(
                             "{} - {}".format(item_cleared[0], item_cleared[1][:-1]))
                         break
 
     def fail2ban(self):
         if not path.exists("/usr/bin/fail2ban-server"):
-            self._log.error("Fail2ban not installed.")
+            log.error("Fail2ban not installed.")
 
 
 if __name__ == "__main__":
     checker = SSHCheck()
-    config = helpers.Config("SSH", SSHCheck)
+    config = helpers.Config(CHECKER_NAME, SSHCheck)
 
     checkers = {}
     for m in helpers.getPublicMembers(SSHCheck):
