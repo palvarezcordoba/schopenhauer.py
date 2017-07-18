@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
+
 import re
 import logging
 from os import popen, path
 from sys import stderr
-
-import yaml
 
 import helpers
 
@@ -12,7 +11,7 @@ logging.basicConfig(level=logging.DEBUG,
                     format="[%(levelname)s::%(name)s] %(message)s")
 
 
-class SSHConf:
+class SSHConf(object):
 
     def __init__(self, conf):
         self.conf = [x.split(' ', 1) for x in conf.rsplit('\n')]
@@ -33,7 +32,7 @@ class SSHConf:
         return self.confdict.keys()
 
 
-class SSHCheck:
+class SSHCheck(object):
 
     def __init__(self):
         with popen("/usr/sbin/sshd -T") as p:
@@ -97,38 +96,16 @@ class SSHCheck:
         if not path.exists("/usr/bin/fail2ban-server"):
             self._log.error("Fail2ban not installed.")
 
-class Config(object):
-
-    def __init__(self):
-        self._config_file = "/etc/schopenhauer.yaml"
-
-        try:
-            with open(self._config_file, "r") as f:
-                self._configuration = yaml.load(f.read())["SSH"]
-        except FileNotFoundError:
-            with open(self._config_file, "w+") as f:
-                default_values = {"SSH": {}}
-                for m in helpers.getPublicMembers(SSHCheck):
-                    default_values["SSH"][m[0]] = True
-
-                yaml.dump(default_values, f, default_flow_style=False)
-                self._configuration = yaml.load(str(default_values))["SSH"]
-
-    def isEnabled(self, checker_str) -> bool:
-        try:
-            return self._configuration[checker_str]
-        except Exception as ex:
-            return True
-
 
 if __name__ == "__main__":
     checker = SSHCheck()
-    config = Config()
+    config = helpers.Config("SSH", SSHCheck)
 
     checkers = {}
     for m in helpers.getPublicMembers(SSHCheck):
-        checkers[m[0]] = m[1]
+        name = m[0]
+        if config.isEnabled(name):
+            checkers[name] = m[1]
 
     for name in sorted(checkers):
-        if config.isEnabled(name):
-            getattr(checker, name)()
+        getattr(checker, name)()
