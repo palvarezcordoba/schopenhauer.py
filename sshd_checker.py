@@ -6,6 +6,8 @@ from sys import stderr
 
 import yaml
 
+import helpers
+
 logging.basicConfig(level=logging.DEBUG,
                     format="[%(levelname)s::%(name)s] %(message)s")
 
@@ -105,27 +107,28 @@ class Config(object):
                 self._configuration = yaml.load(f.read())["SSH"]
         except FileNotFoundError:
             with open(self._config_file, "w+") as f:
-                # Duplicated an ugly, maybe we can list all non private SSHCheck memeber functions on runtime?
-                default_values = {"SSH": {'root': True, 'port': True, 'logingracetime': True,
-                    'passauthentication': True, 'TFA': True, 'login_filter': True,
-                    'subsystem': True, 'algorithm': True, 'fail2ban': True}}
+                default_values = {"SSH": {}}
+                for m in helpers.getPublicMembers(SSHCheck):
+                    default_values["SSH"][m[0]] = True
 
                 yaml.dump(default_values, f, default_flow_style=False)
                 self._configuration = yaml.load(str(default_values))["SSH"]
 
     def isEnabled(self, checker_str) -> bool:
-        return self._configuration[checker_str]
+        try:
+            return self._configuration[checker_str]
+        except Exception as ex:
+            return True
 
 
 if __name__ == "__main__":
     checker = SSHCheck()
     config = Config()
 
-    checkers = {'root': checker.root, 'port': checker.port, 'logingracetime': checker.logingracetime,
-            'passauthentication': checker.passauthentication, 'TFA': checker.TFA, 'login_filter': checker.login_filter,
-            'subsystem': checker.subsystem, 'algorithm': checker.algorithm, 'fail2ban': checker.fail2ban}
-
+    checkers = {}
+    for m in helpers.getPublicMembers(SSHCheck):
+        checkers[m[0]] = m[1]
 
     for name in sorted(checkers):
         if config.isEnabled(name):
-            checkers[name]()
+            getattr(checker, name)()
