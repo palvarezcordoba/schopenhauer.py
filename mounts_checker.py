@@ -21,7 +21,10 @@ class MountCheck(object):
         for i in self._partitions:
             if i[1] == "/tmp":
                 if not "noexec" in i[3]:
-                    log.error("/tmp mountpoint should have the *noexec* option set")
+                    log.error("/tmp mountpoint should have *noexec* option")
+                    return
+ 
+        log.error("/tmp should be separated and have *noexec* option")
 
 if __name__ == "__main__":
     checker = MountCheck()
