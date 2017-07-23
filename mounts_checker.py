@@ -26,9 +26,13 @@ class MountCheck(object):
  
         log.error("/tmp should be separated and have *noexec* option")
 
-if __name__ == "__main__":
+def run():
     checker = MountCheck()
     
     c = helpers.getCheckers(MountCheck, CHECKER_NAME)
     for name in sorted(c):
         getattr(checker, name)()
+
+
+if __name__ == "__main__":
+	run()

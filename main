@@ -1,5 +1,0 @@
-#!/bin/sh
-
-#[ "$(pgrep sshd)" != "" ] && ./sshd_checker.py || echo "[INFO] SSH service is not running, I will not check it"
-./sshd_checker.py
-./mounts_checker.py

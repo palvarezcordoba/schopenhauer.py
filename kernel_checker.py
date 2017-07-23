@@ -83,9 +83,13 @@ class KernelCheck(object):
         if not self._isYes("STATIC_USERMODEHELPER"):
             log.error("Enable static usermode helper.")
 
-if __name__ == "__main__":
+def run():
     checker = KernelCheck()
 
     c = helpers.getCheckers(KernelCheck, CHECKER_NAME)
     for name in sorted(c):
         getattr(checker, name)()
+
+
+if __name__ == "__main__":
+    run()

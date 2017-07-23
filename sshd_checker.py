@@ -96,10 +96,12 @@ class SSHCheck(object):
         if not path.exists("/usr/bin/fail2ban-server"):
             log.error("Fail2ban not installed.")
 
-
-if __name__ == "__main__":
+def run():
     checker = SSHCheck()
     
     c = helpers.getCheckers(SSHCheck, CHECKER_NAME)
     for name in sorted(c):
         getattr(checker, name)()
+
+if __name__ == "__main__":
+    run()
