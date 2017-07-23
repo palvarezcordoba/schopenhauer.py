@@ -48,5 +48,5 @@ class Config(object):
     def isEnabled(self, checker_str) -> bool:
         try:
             return self._configuration[checker_str]
-        except Exception as ex:
+        except:
             return True

@@ -3,6 +3,7 @@
 import logging
 import os.path
 import platform
+import gzip
 
 import helpers
 
@@ -12,7 +13,6 @@ logging.basicConfig(format="[%(name)s] %(message)s")
 log = logging.getLogger(CHECKER_NAME)
 
 
-# TODO: Handle gzip compressed files (ie: /proc/config.gz)
 class KernelCheck(object):
 
     def __init__(self):
@@ -21,8 +21,12 @@ class KernelCheck(object):
             log.error("Can not found kernel configuration file. These test will not run")
             return
 
-        with open(kernel_config_file) as f:
-            self._config_file = f.readlines()
+        if kernel_config_file.endswith(".gz"):
+            with gzip.open(kernel_config_file) as f:
+                self._config_file = f.readlines()
+        else:
+            with open(kernel_config_file) as f:
+                self._config_file = f.readlines()
 
     def _getConfigFile(self) -> str:
         # On some distros the config file can also be found on /usr/src/linux but as long as 
