@@ -5,8 +5,8 @@ import os.path
 import platform
 import gzip
 import sys
-
 import helpers
+
 
 CHECKER_NAME = "KERNEL"
 
@@ -14,8 +14,7 @@ logging.basicConfig(format="[%(name)s] %(message)s")
 log = logging.getLogger(CHECKER_NAME)
 
 
-class KernelCheck(object):
-
+class KernelCheck:
     def __init__(self):
         kernel_config_file = self._getConfigFile()
         if not kernel_config_file:
