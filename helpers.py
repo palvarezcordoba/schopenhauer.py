@@ -14,6 +14,17 @@ def notPrivate(func) -> bool:
 def getPublicMembers(obj) -> tuple:
     return inspect.getmembers(obj, notPrivate)
 
+def getCheckers(class_obj, name) -> dict:
+    config = Config(name, class_obj)
+
+    checkers = {}
+    for m in getPublicMembers(class_obj):
+        name = m[0]
+        if config.isEnabled(name):
+            checkers[name] = m[1]
+
+    return checkers
+
 
 class Config(object):
 

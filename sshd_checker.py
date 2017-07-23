@@ -99,13 +99,7 @@ class SSHCheck(object):
 
 if __name__ == "__main__":
     checker = SSHCheck()
-    config = helpers.Config(CHECKER_NAME, SSHCheck)
-
-    checkers = {}
-    for m in helpers.getPublicMembers(SSHCheck):
-        name = m[0]
-        if config.isEnabled(name):
-            checkers[name] = m[1]
-
-    for name in sorted(checkers):
+    
+    c = helpers.getCheckers(SSHCheck, CHECKER_NAME)
+    for name in sorted(c):
         getattr(checker, name)()

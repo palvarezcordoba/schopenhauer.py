@@ -66,13 +66,7 @@ class KernelCheck(object):
 
 if __name__ == "__main__":
     checker = KernelCheck()
-    config = helpers.Config(CHECKER_NAME, KernelCheck)
 
-    checkers = {}
-    for m in helpers.getPublicMembers(KernelCheck):
-        name = m[0]
-        if config.isEnabled(name):
-            checkers[name] = m[1]
-
-    for name in sorted(checkers):
+    c = helpers.getCheckers(KernelCheck, CHECKER_NAME)
+    for name in sorted(c):
         getattr(checker, name)()

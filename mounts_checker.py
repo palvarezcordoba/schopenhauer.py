@@ -28,13 +28,7 @@ class MountCheck(object):
 
 if __name__ == "__main__":
     checker = MountCheck()
-    config = helpers.Config(CHECKER_NAME, MountCheck)
-
-    checkers = {}
-    for m in helpers.getPublicMembers(MountCheck):
-        name = m[0]
-        if config.isEnabled(name):
-            checkers[name] = m[1]
-
-    for name in sorted(checkers):
+    
+    c = helpers.getCheckers(MountCheck, CHECKER_NAME)
+    for name in sorted(c):
         getattr(checker, name)()
