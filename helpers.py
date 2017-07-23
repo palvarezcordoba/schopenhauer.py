@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
+import optparse
 import inspect
-
 import yaml
+
 
 def notPrivate(func) -> bool:
     if inspect.isfunction(func):
@@ -26,11 +27,12 @@ def getCheckers(class_obj, name) -> dict:
     return checkers
 
 
-class Config(object):
-
+class Config:
     def __init__(self, name, obj):
-        self._config_file = "/etc/schopenhauer.yaml"
-
+        self.parser = optparse.OptionParser()
+        self.parser.add_option("-c", default="/etc/schopenhauer.yaml", type="string")
+        self.options = self.parser.parse_args()[0]
+        self._config_file = self.options.c
         self._configuration = {}
         try:
             with open(self._config_file, "r") as f:
