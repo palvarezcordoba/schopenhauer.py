@@ -77,7 +77,7 @@ class SSHCheck(object):
 
     def subsystem(self):
         if "subsystem" in self._sshd.getOptions():
-            log.error("If you not really need {} disable it.".format(
+            log.error("If you do not really need {} disable it.".format(
                 self._sshd["subsystem"]))
 
     def algorithm(self):
