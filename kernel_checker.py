@@ -53,16 +53,27 @@ class KernelCheck(object):
 
     def stackProtector(self):
         if self._isYes("CC_STACKPROTECTOR_NONE"):
-            log.error("Stack protector is completely disabled. Enable i")
+            log.error("Stack protector is completely disabled. Enable it")
 
     def legacyvsyscall(self):
         if not self._isYes("LEGACY_VSYSCALL_NONE"):
-            log.error("Disable legacy vsyscall table.")
+            log.error("Disable legacy vsyscall table")
 
     def modifyTLD(self):
         if self._isYes("MODIFY_LDT_SYSCALL"):
             log.error("Disable TLD modify feature")
 
+    def restrictDmesg(self):
+        if not self._isYes("SECURITY_DMESG_RESTRICT"):
+            log.error("Restrict access to dmesg logs to avoid information leaks")
+
+    def hardenedMemCopies(self):
+        if not self._isYes("HARDENED_USERCOPY"):
+            log.error("Enable hardened memory copies to/from the kernel")
+
+    def staticUsermodeHelper(self):
+        if not self._isYes("STATIC_USERMODEHELPER"):
+            log.error("Enable static usermode helper.")
 
 if __name__ == "__main__":
     checker = KernelCheck()
