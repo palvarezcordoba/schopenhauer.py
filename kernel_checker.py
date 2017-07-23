@@ -4,6 +4,7 @@ import logging
 import os.path
 import platform
 import gzip
+import sys
 
 import helpers
 
@@ -39,6 +40,9 @@ class KernelCheck(object):
         m = platform.machine()
         f_list = ["/proc/config", "/proc/config.gz", "/boot/config-{}".format(r),
                   "/etc/kernels/kernel-config-{}-{}".format(m, r)]
+
+        if len(sys.argv) > 1:
+            f_list.insert(0, sys.argv[1])
 
         for f in f_list:
             if os.path.isfile(f):
