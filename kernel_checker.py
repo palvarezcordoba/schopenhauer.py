@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 import logging
+import optparse
 import os.path
 import platform
 import gzip
-import sys
 import helpers
 
 
@@ -17,6 +17,9 @@ log = logging.getLogger(CHECKER_NAME)
 class KernelCheck:
     def __init__(self):
         kernel_config_file = self._getConfigFile()
+        self.parser = optparse.OptionParser()
+        self.parser.add_option("-ck", type="string")
+        self.args = self.parser.parse_args()[0]
         if not kernel_config_file:
             log.error("Can not found kernel configuration file. These test will not run")
             return
@@ -40,8 +43,8 @@ class KernelCheck:
         f_list = ["/proc/config", "/proc/config.gz", "/boot/config-{}".format(r),
                   "/etc/kernels/kernel-config-{}-{}".format(m, r)]
 
-        if len(sys.argv) > 1:
-            f_list.insert(0, sys.argv[1])
+        if self.args.ck:
+            f_list.insert(self.args.ck)
 
         for f in f_list:
             if os.path.isfile(f):
