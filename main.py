@@ -4,14 +4,17 @@ import platform
 
 import psutil
 
-import kernel_checker
 import mounts_checker
+import users_checker
+import kernel_checker
 import sshd_checker
+
+mounts_checker.run();
+users_checker.run()
 
 if platform.system() == "Linux":
 	kernel_checker.run();
 
-mounts_checker.run();
 
 for p in psutil.process_iter():
 	if p.as_dict(attrs=["name"])["name"] == "sshd":
