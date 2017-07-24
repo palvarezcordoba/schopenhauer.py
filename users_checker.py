@@ -2,10 +2,10 @@
 
 #!/usr/bin/env python3
 
+import os
 import pwd
 import spwd
 import logging
-
 import helpers
 
 CHECKER_NAME = "USERS"
@@ -16,7 +16,6 @@ log = logging.getLogger(CHECKER_NAME)
 
 # TODO: Check non-root users
 class UsersCheck(object):
-
     def __init__(self):
         pass
 
@@ -33,8 +32,11 @@ class UsersCheck(object):
 
 
 def run():
+    if os.geteuid() != 0:
+        log.error("UsersCheck will not executed."
+        " It should be executed as root.")
+        return
     checker = UsersCheck()
-    
     c = helpers.getCheckers(UsersCheck, CHECKER_NAME)
     for name in sorted(c):
         getattr(checker, name)()
