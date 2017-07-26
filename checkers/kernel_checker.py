@@ -13,13 +13,21 @@ CHECKER_NAME = "KERNEL"
 logging.basicConfig(format="[%(name)s] %(message)s")
 log = logging.getLogger(CHECKER_NAME)
 
+class Parser(optparse.OptionParser):
+    def _process_args(self, largs, rargs, values):
+        while rargs:
+            try:
+                optparse.OptionParser._process_args(self,largs,rargs,values)
+            except (optparse.BadOptionError, optparse.AmbiguousOptionError) as e:
+                largs.append(e.opt_str)
+
 
 class KernelCheck:
     def __init__(self):
-        kernel_config_file = self._getConfigFile()
-        self.parser = optparse.OptionParser()
-        self.parser.add_option("-ck", type="string")
+        self.parser = Parser()
+        self.parser.add_option("--ck", default="", type="string")
         self.args = self.parser.parse_args()[0]
+        kernel_config_file = self._getConfigFile()
         if not kernel_config_file:
             log.error("Can not found kernel configuration file. These test will not run")
             return
@@ -44,7 +52,7 @@ class KernelCheck:
                   "/etc/kernels/kernel-config-{}-{}".format(m, r)]
 
         if self.args.ck:
-            f_list.insert(self.args.ck)
+            f_list.insert(0, self.args.ck)
 
         for f in f_list:
             if os.path.isfile(f):

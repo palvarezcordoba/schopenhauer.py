@@ -4,6 +4,13 @@ import optparse
 import inspect
 import yaml
 
+class Parser(optparse.OptionParser):
+    def _process_args(self, largs, rargs, values):
+        while rargs:
+            try:
+                optparse.OptionParser._process_args(self,largs,rargs,values)
+            except (optparse.BadOptionError, optparse.AmbiguousOptionError) as e:
+                largs.append(e.opt_str)
 
 def notPrivate(func) -> bool:
     if inspect.isfunction(func):
@@ -29,8 +36,9 @@ def getCheckers(class_obj, name) -> dict:
 
 class Config:
     def __init__(self, name, obj):
-        self.parser = optparse.OptionParser()
+        self.parser = Parser()
         self.parser.add_option("-c", default="/etc/schopenhauer.yaml", type="string")
+        #self.parser.add_option("--ck")
         self.options = self.parser.parse_args()[0]
         self._config_file = self.options.c
         self._configuration = {}
