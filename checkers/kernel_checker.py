@@ -15,11 +15,12 @@ CHECKER_NAME = "KERNEL"
 logging.basicConfig(format="[%(name)s] %(message)s")
 log = logging.getLogger(CHECKER_NAME)
 
+
 class Parser(optparse.OptionParser):
     def _process_args(self, largs, rargs, values):
         while rargs:
             try:
-                optparse.OptionParser._process_args(self,largs,rargs,values)
+                optparse.OptionParser._process_args(self, largs, rargs, values)
             except (optparse.BadOptionError, optparse.AmbiguousOptionError) as e:
                 largs.append(e.opt_str)
 
@@ -99,9 +100,9 @@ class KernelCheck:
             log.error("Enable static usermode helper.")
 
     def dmesgRestricted(self):
-            s = sysctl()
-            if not int(s.read("kernel.dmesg_restrict")):
-                log.error("Set kernel.dmesg_restrict to 1.")
+        s = sysctl()
+        if not int(s.read("kernel.dmesg_restrict")):
+            log.error("Set kernel.dmesg_restrict to 1.")
 
 
 def makes_sense() -> bool:

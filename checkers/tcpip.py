@@ -57,5 +57,6 @@ def run():
     for name in sorted(c):
         getattr(checker, name)()
 
+
 if __name__ == "__main__":
     run()

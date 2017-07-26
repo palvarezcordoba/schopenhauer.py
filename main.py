@@ -14,8 +14,8 @@ for m in os.scandir("checkers"):
         checkers.append(__import__(m.name[:-3]))
 for c in checkers:
     try:
-    	if c.makes_sense():
-        	c.run()
+        if c.makes_sense():
+            c.run()
     except BaseException as e:
         log.name = c.CHECKER_NAME
         log.error(e)
