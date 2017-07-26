@@ -104,6 +104,8 @@ class KernelCheck:
 
 
 def run():
+    if platform.system() != "Linux":
+        return
     checker = KernelCheck()
 
     c = helpers.getCheckers(KernelCheck, CHECKER_NAME)
