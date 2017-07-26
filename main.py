@@ -3,7 +3,6 @@
 import sys
 import os
 import logging
-import platform
 
 logging.basicConfig(format="[%(name)s] %(message)s")
 log = logging.getLogger("MAIN")
