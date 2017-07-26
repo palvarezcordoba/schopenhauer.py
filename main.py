@@ -17,4 +17,5 @@ for c in checkers:
 	try:
 		c.run()
 	except BaseException as e:
+		log.name = c.__name__
 		log.error(e)
