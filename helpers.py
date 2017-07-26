@@ -37,7 +37,7 @@ def getCheckers(class_obj, name) -> dict:
 class Config:
     def __init__(self, name, obj):
         self.parser = Parser()
-        self.parser.add_option("-c", default="/etc/schopenhauer.yaml", type="string")
+        self.parser.add_option("-c", default="schopenhauer.yaml", type="string")
         self.options = self.parser.parse_args()[0]
         self._config_file = self.options.c
         self._configuration = {}
