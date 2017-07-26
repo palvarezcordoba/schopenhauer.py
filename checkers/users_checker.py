@@ -25,14 +25,15 @@ class UsersCheck(object):
                 log.error("There is a user with uid = 0 which is not root")
 
     def checkExpiration(self):
-    	d = spwd.getspnam("root")
-    	if d.sp_expire == -1:
-    		log.error("Enable expiration of users")
+        d = spwd.getspnam("root")
+        if d.sp_expire == -1:
+            log.error("Enable expiration of users")
 
 
 
 def run():
     if os.geteuid() != 0:
+
         log.error("UsersCheck will not executed."
         " It should be executed as root.")
         return

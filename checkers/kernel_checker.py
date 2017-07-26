@@ -23,13 +23,15 @@ class Parser(optparse.OptionParser):
 
 
 class KernelCheck:
+
     def __init__(self):
         self.parser = Parser()
         self.parser.add_option("--ck", default="", type="string")
         self.args = self.parser.parse_args()[0]
         kernel_config_file = self._getConfigFile()
         if not kernel_config_file:
-            log.error("Can not found kernel configuration file. These test will not run")
+            log.error(
+                "Can not found kernel configuration file. These test will not run")
             return
 
         if kernel_config_file.endswith(".gz"):
@@ -40,9 +42,10 @@ class KernelCheck:
                 self._config_file = f.readlines()
 
     def _getConfigFile(self) -> str:
-        # On some distros the config file can also be found on /usr/src/linux but as long as 
-        # we can not ensure it is the current config file is better to avoid it.
-        
+        # On some distros the config file can also be found on /usr/src/linux but as long as
+        # we can not ensure it is the current config file is better to avoid
+        # it.
+
         # In case that no config file is found we can try to dynamically test if some protections
         # are really enabled
 
@@ -92,6 +95,7 @@ class KernelCheck:
     def staticUsermodeHelper(self):
         if not self._isYes("STATIC_USERMODEHELPER"):
             log.error("Enable static usermode helper.")
+
 
 def run():
     checker = KernelCheck()

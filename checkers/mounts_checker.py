@@ -11,6 +11,7 @@ log = logging.getLogger(CHECKER_NAME)
 
 
 class MountCheck:
+
     def __init__(self):
         self._partitions = psutil.disk_partitions(all=True)
 
