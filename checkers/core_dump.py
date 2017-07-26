@@ -10,10 +10,15 @@ log = logging.getLogger(CHECKER_NAME)
 
 
 class CoreDump:
+
     def check_core_dump(self):
         if os.popen("ulimit -c").read() != "0\n":
             log.error(
                 "It's recomended to disable core dumps to avoid information leakeage")
+
+
+def makes_sense() -> bool:
+    return True
 
 
 def run():

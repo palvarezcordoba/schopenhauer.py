@@ -30,6 +30,8 @@ class UsersCheck(object):
             log.error("Enable expiration of users")
 
 
+def makes_sense() -> bool:
+    return True
 
 def run():
 #    if os.geteuid() != 0:

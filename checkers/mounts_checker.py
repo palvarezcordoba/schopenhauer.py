@@ -46,6 +46,10 @@ class MountCheck:
                 log.error("Usage of {}: {}%".format(partition[1], usage))
 
 
+def makes_sense() -> bool:
+    return True
+
+
 def run():
     checker = MountCheck()
 

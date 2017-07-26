@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+import helpers
+
+
+CHECKER_NAME = "CHECKER_NAME"
+logging.basicConfig(format="[%(name)s] %(message)s")
+log = logging.getLogger(CHECKER_NAME)
+
+
+class CheckerClass:
+
+    def __init__(self):
+        pass
+
+    # Functions that are not private will be executed automatically
+    def some_check(self):
+        pass
+
+
+# return True if it the service/platform are found and it makes sense to run
+def make_sense() -> bool:
+    return True
+
+def run():
+    checker = CheckerClass()
+
+    c = helpers.getCheckers(CheckerClass, CHECKER_NAME)
+    for name in sorted(c):
+        getattr(checker, name)()
+
+
+if __name__ == "__main__":
+    run()

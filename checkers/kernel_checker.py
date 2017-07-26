@@ -5,6 +5,7 @@ import optparse
 import os.path
 import platform
 import gzip
+
 import helpers
 from sysctl import sysctl
 
@@ -103,9 +104,11 @@ class KernelCheck:
                 log.error("Set kernel.dmesg_restrict to 1.")
 
 
+def makes_sense() -> bool:
+    return platform.system() == "Linux"
+
+
 def run():
-    if platform.system() != "Linux":
-        return
     checker = KernelCheck()
 
     c = helpers.getCheckers(KernelCheck, CHECKER_NAME)

@@ -9,17 +9,22 @@ log = logging.getLogger(CHECKER_NAME)
 
 
 class HidePID:
-	def checkHidePID(self):
-		for mountpoint in psutil.disk_partitions(all=True):
-			if mountpoint.mountpoint == "/proc":
-				if "hidepid" not in mountpoint.opts \
-				or "hidepid=0" in mountpoint.opts:
-					log.error("Set hidepid mount option on /proc.")
+
+    def checkHidePID(self):
+        for mountpoint in psutil.disk_partitions(all=True):
+            if mountpoint.mountpoint == "/proc":
+                if "hidepid" not in mountpoint.opts \
+                        or "hidepid=0" in mountpoint.opts:
+                    log.error("Set hidepid mount option on /proc.")
+
+
+def makes_sense() -> bool:
+    return platform.system() == "Linux"
 
 
 def run():
     checker = HidePID()
-    
+
     c = helpers.getCheckers(HidePID, CHECKER_NAME)
     for name in sorted(c):
         getattr(checker, name)()

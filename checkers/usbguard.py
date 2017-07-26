@@ -9,16 +9,21 @@ log = logging.getLogger(CHECKER_NAME)
 
 
 class USBGuard:
-	def checkUSBGuardIsInstalled(self):
-		try:
-			os.stat("/usr/bin/usbguard")
-		except FileNotFoundError:
-			log.error("usbguard is not installed.")
+
+    def checkUSBGuardIsInstalled(self):
+        try:
+            os.stat("/usr/bin/usbguard")
+        except FileNotFoundError:
+            log.error("usbguard is not installed.")
+
+
+def makes_sense() -> bool:
+    return True
 
 
 def run():
     checker = USBGuard()
-    
+
     c = helpers.getCheckers(USBGuard, CHECKER_NAME)
     for name in sorted(c):
         getattr(checker, name)()
