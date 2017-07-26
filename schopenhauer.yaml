@@ -30,6 +30,8 @@ SSH:
   port: true
   root: true
   subsystem: true
+USBGUARD:
+  checkUSBGuardIsInstalled: true
 USERS:
   checkExpiration: true
   checkUid: true
