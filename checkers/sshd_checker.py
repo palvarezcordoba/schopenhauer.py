@@ -37,7 +37,7 @@ class SSHConf(object):
 class SSHCheck(object):
 
     def __init__(self):
-        with popen("/usr/sbin/sshd -T") as p:
+        with popen("/usr/sbin/sshd -T 2>/dev/null") as p:
             sshd_config = p.read()
         self._sshd = SSHConf(sshd_config)
 
