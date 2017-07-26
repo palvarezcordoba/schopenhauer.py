@@ -1,0 +1,30 @@
+BIND9:
+  checkAllow: true
+  checkPerms: true
+  checkUser: true
+COREDUMP:
+  check_core_dump: true
+KERNEL:
+  dmesgRestrict: true
+  hardenedMemCopies: true
+  heapRandomization: true
+  legacyvsyscall: true
+  modifyTLD: true
+  restrictDmesg: true
+  stackProtector: true
+  staticUsermodeHelper: true
+MOUNT:
+  home: true
+  tmp: true
+  tmpfs: true
+  usage: true
+SSH:
+  TFA: true
+  algorithm: true
+  fail2ban: true
+  login_filter: true
+  logingracetime: true
+  passauthentication: true
+  port: true
+  root: true
+  subsystem: true
