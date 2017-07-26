@@ -30,3 +30,6 @@ SSH:
   port: true
   root: true
   subsystem: true
+USERS:
+  checkExpiration: true
+  checkUid: true
