@@ -6,6 +6,7 @@ import os.path
 import platform
 import gzip
 import helpers
+from sysctl import sysctl
 
 
 CHECKER_NAME = "KERNEL"
@@ -95,6 +96,11 @@ class KernelCheck:
     def staticUsermodeHelper(self):
         if not self._isYes("STATIC_USERMODEHELPER"):
             log.error("Enable static usermode helper.")
+
+    def dmesgRestricted(self):
+            s = sysctl()
+            if not int(s.read("kernel.dmesg_restrict")):
+                log.error("Set kernel.dmesg_restrict to 1.")
 
 
 def run():
