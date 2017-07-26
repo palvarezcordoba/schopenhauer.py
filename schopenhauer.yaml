@@ -30,6 +30,14 @@ SSH:
   port: true
   root: true
   subsystem: true
+TCP/IP:
+  icmpIgnoreBroadcast: true
+  ignoreBogus: true
+  logMartianPackets: true
+  rfc1337: true
+  rpFilter: true
+  syncCookies: true
+  tcpTimestamps: true
 USBGUARD:
   checkUSBGuardIsInstalled: true
 USERS:
