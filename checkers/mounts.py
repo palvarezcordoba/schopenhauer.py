@@ -12,7 +12,7 @@ log = logging.getLogger(CHECKER_NAME)
 
 class MountCheck:
 
-    def __init__(self):
+    def __init__(self, args):
         self._partitions = psutil.disk_partitions(all=True)
 
     def tmp(self):
@@ -50,10 +50,10 @@ def makes_sense() -> bool:
     return True
 
 
-def run():
-    checker = MountCheck()
+def run(args=None):
+    checker = MountCheck(args)
 
-    c = helpers.getCheckers(MountCheck, CHECKER_NAME)
+    c = helpers.getCheckers(MountCheck, CHECKER_NAME, args)
     for name in sorted(c):
         getattr(checker, name)()
 

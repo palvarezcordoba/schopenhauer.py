@@ -13,6 +13,9 @@ log = logging.getLogger(CHECKER_NAME)
 
 
 class Bind9:
+    
+    def __init__(self, args):
+        pass
 
     def checkUser(self):
         for process in psutil.process_iter():
@@ -54,10 +57,10 @@ def makes_sense() -> bool:
     return False
 
 
-def run():
-    checker = Bind9()
+def run(args=None):
+    checker = Bind9(args)
 
-    c = helpers.getCheckers(Bind9, CHECKER_NAME)
+    c = helpers.getCheckers(Bind9, CHECKER_NAME, args)
     for name in sorted(c):
         getattr(checker, name)()
 

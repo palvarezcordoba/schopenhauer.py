@@ -10,7 +10,7 @@ log = logging.getLogger(CHECKER_NAME)
 
 class TCPIP:
 
-    def __init__(self):
+    def __init__(self, args):
         self.sysctl = sysctl()
 
     def syncCookies(self):
@@ -50,10 +50,10 @@ def makes_sense() -> bool:
     return True
 
 
-def run():
-    checker = TCPIP()
+def run(args=None):
+    checker = TCPIP(args)
 
-    c = helpers.getCheckers(TCPIP, CHECKER_NAME)
+    c = helpers.getCheckers(TCPIP, CHECKER_NAME, args)
     for name in sorted(c):
         getattr(checker, name)()
 

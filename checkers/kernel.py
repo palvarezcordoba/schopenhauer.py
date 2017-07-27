@@ -18,8 +18,8 @@ log = logging.getLogger(CHECKER_NAME)
 
 class KernelCheck:
 
-    def __init__(self):
-        self._args = None
+    def __init__(self, args):
+        self._args = args[0]
         if __name__ == "__main__":
             self._parseOpts()
 
@@ -55,7 +55,8 @@ class KernelCheck:
                   "/etc/kernels/kernel-config-{}-{}".format(m, r)]
 
         if self._args:
-            f_list.insert(0, self._args.ck)
+            if self._args.ck:
+                f_list.insert(0, self._args.ck)
 
         for f in f_list:
             if os.path.isfile(f):
@@ -106,10 +107,10 @@ def makes_sense() -> bool:
     return platform.system() == "Linux"
 
 
-def run():
-    checker = KernelCheck()
+def run(args=None):
+    checker = KernelCheck(args)
 
-    c = helpers.getCheckers(KernelCheck, CHECKER_NAME)
+    c = helpers.getCheckers(KernelCheck, CHECKER_NAME, args)
     for name in sorted(c):
         getattr(checker, name)()
 

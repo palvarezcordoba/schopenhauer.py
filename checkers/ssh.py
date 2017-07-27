@@ -44,7 +44,7 @@ class SSHConf(object):
 
 class SSHCheck(object):
 
-    def __init__(self):
+    def __init__(self, args):
         with popen("/usr/sbin/sshd -T 2>/dev/null") as p:
             sshd_config = p.read()
         self._sshd = SSHConf(sshd_config)
@@ -108,10 +108,10 @@ def makes_sense() -> bool:
     return True
 
 
-def run():
-    checker = SSHCheck()
+def run(args=None):
+    checker = SSHCheck(args)
 
-    c = helpers.getCheckers(SSHCheck, CHECKER_NAME)
+    c = helpers.getCheckers(SSHCheck, CHECKER_NAME, args)
     for name in sorted(c):
         getattr(checker, name)()
 

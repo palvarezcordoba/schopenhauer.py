@@ -13,6 +13,9 @@ log = logging.getLogger(CHECKER_NAME)
 
 
 class HidePID:
+    
+    def __init__(self, args):
+        pass
 
     def checkHidePID(self):
         for mountpoint in psutil.disk_partitions(all=True):
@@ -26,10 +29,10 @@ def makes_sense() -> bool:
     return platform.system() == "Linux"
 
 
-def run():
-    checker = HidePID()
+def run(args=None):
+    checker = HidePID(args)
 
-    c = helpers.getCheckers(HidePID, CHECKER_NAME)
+    c = helpers.getCheckers(HidePID, CHECKER_NAME, args)
     for name in sorted(c):
         getattr(checker, name)()
 

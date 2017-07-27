@@ -5,13 +5,13 @@ import inspect
 import yaml
 
 
-class Parser(optparse.OptionParser):
-    def _process_args(self, largs, rargs, values):
-        while rargs:
-            try:
-                optparse.OptionParser._process_args(self, largs, rargs, values)
-            except (optparse.BadOptionError, optparse.AmbiguousOptionError) as e:
-                largs.append(e.opt_str)
+#class Parser(optparse.OptionParser):
+#    def _process_args(self, largs, rargs, values):
+#        while rargs:
+#            try:
+#                optparse.OptionParser._process_args(self, largs, rargs, values)
+#            except (optparse.BadOptionError, optparse.AmbiguousOptionError) as e:
+#                largs.append(e.opt_str)
 
 
 def notPrivate(func) -> bool:
@@ -26,8 +26,8 @@ def getPublicMembers(obj) -> tuple:
     return inspect.getmembers(obj, notPrivate)
 
 
-def getCheckers(class_obj, name) -> dict:
-    config = Config(name, class_obj)
+def getCheckers(class_obj, name, args) -> dict:
+    config = Config(name, class_obj, args)
 
     checkers = {}
     for m in getPublicMembers(class_obj):
@@ -39,8 +39,13 @@ def getCheckers(class_obj, name) -> dict:
 
 
 class Config:
-    def __init__(self, name, obj):
-        self._config_file = "/etc/schopenhauer.yaml"
+    def __init__(self, name, obj, args):
+        if __name__ == "__main__":
+            self._getConfFilePath()
+        elif args:
+            self._config_file = args[0].c
+        else:
+            self._config_file = "/etc/schopenhauer.yaml"
         self._configuration = {}
         try:
             with open(self._config_file, "r") as f:
@@ -54,6 +59,13 @@ class Config:
 
                 yaml.dump(self._configuration, f, default_flow_style=False)
                 self._configuration = yaml.load(str(self._configuration))[name]
+    
+    def _getConfFilePath(self):
+        self.parser = Parser()
+        self.parser.add_option(
+            "-c", default="/etc/schopenhauer.yaml", type="string")
+        self.options = self.parser.parse_args()[0]
+        self._config_file = self.options.c
 
     def isEnabled(self, checker_str) -> bool:
         try:

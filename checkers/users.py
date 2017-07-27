@@ -16,7 +16,7 @@ log = logging.getLogger(CHECKER_NAME)
 
 # TODO: Check non-root users
 class UsersCheck(object):
-    def __init__(self):
+    def __init__(self, args):
         pass
 
     def checkUid(self):
@@ -34,14 +34,13 @@ def makes_sense() -> bool:
     return True
 
 
-def run():
-    #    if os.geteuid() != 0:
-
-    #        log.error("UsersCheck will not executed."
-    #        " It should be executed as root.")
-    #        return
-    checker = UsersCheck()
-    c = helpers.getCheckers(UsersCheck, CHECKER_NAME)
+def run(args=None):
+    if os.geteuid() != 0:
+        log.error("UsersCheck will not executed."
+            " It should be executed as root.")
+        return
+    checker = UsersCheck(args)
+    c = helpers.getCheckers(UsersCheck, CHECKER_NAME, args)
     for name in sorted(c):
         getattr(checker, name)()
 
