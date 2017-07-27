@@ -45,7 +45,13 @@ class Bind9:
 
 
 def makes_sense() -> bool:
-    return True
+    # We should extent the check to ensure that this is not another program
+    # with the same name.
+    for process in psutil.process_iter():
+        if process.name() == "named":
+            return True
+
+    return False
 
 
 def run():

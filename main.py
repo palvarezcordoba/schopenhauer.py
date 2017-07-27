@@ -3,9 +3,10 @@
 import sys
 import os
 import logging
+import traceback
 
 logging.basicConfig(format="[%(name)s] %(message)s")
-log = logging.getLogger("MAIN")
+log = logging.getLogger(__name__)
 
 sys.path.append("checkers")
 checkers = []
@@ -16,6 +17,7 @@ for c in checkers:
     try:
         if c.makes_sense():
             c.run()
-    except BaseException as e:
-        log.name = c.CHECKER_NAME
+    except Exception as e:
+        traceback.print_exc()
         log.error(e)
+        break

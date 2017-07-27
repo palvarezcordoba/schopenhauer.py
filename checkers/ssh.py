@@ -13,19 +13,27 @@ logging.basicConfig(format="[%(name)s] %(message)s")
 log = logging.getLogger(CHECKER_NAME)
 
 
+algorithm_blacklist = """
+ecdh-sha2-nistp256 weak eliptic curves
+ecdh-sha2-nistp384 weak eliptic curves
+ecdh-sha2-nistp521 weak eliptic curves
+diffie-hellman-group14-sha1 weak hash algorithm
+ecdsa-sha2-nistp256 weak eliptic curves
+hmac-sha1 weak hash algorithm
+hmac-sha1-etm@openssh.com weak hash algorithm
+"""
+
 class SSHConf(object):
 
     def __init__(self, conf):
         self.conf = [x.split(' ', 1) for x in conf.rsplit('\n')]
         self.confdict = dict()
         for x in self.conf:
-            try:
+            if len(x) > 1:
                 if x[0] in self.confdict.keys():
                     self.confdict[x[0]] = (self.confdict[x[0]], x[1])
                 else:
                     self.confdict.update({x[0]: x[1]})
-            except:
-                pass
 
     def __getitem__(self, x):
         return self.confdict[x]
@@ -81,9 +89,7 @@ class SSHCheck(object):
                 self._sshd["subsystem"]))
 
     def algorithm(self):
-        with open("algorithm_blacklist", 'r') as f:
-            blacklist = f.readlines()
-        for item in blacklist:
+        for item in algorithm_blacklist.strip().splitlines():
             item_cleared = item.split(' ', 1)
             for x in self._sshd.conf:
                 if len(x) > 1:
