@@ -1,6 +1,10 @@
 import logging
+
 import psutil
+import platform
+
 import helpers
+
 
 CHECKER_NAME = "HIDEPID"
 
