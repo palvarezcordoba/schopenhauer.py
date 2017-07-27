@@ -1,10 +1,6 @@
 
 class sysctl:
     def read(self, key):
-        try:
-            f = open("/proc/sys/%s" % key.replace(".", "/"))
-        except:
-            return None
-        value = f.readline().strip()
-        f.close()
+        with open("/proc/sys/%s" % key.replace(".", "/")) as f:
+        	value = f.readline().strip()
         return value

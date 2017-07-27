@@ -16,21 +16,13 @@ logging.basicConfig(format="[%(name)s] %(message)s")
 log = logging.getLogger(CHECKER_NAME)
 
 
-class Parser(optparse.OptionParser):
-    def _process_args(self, largs, rargs, values):
-        while rargs:
-            try:
-                optparse.OptionParser._process_args(self, largs, rargs, values)
-            except (optparse.BadOptionError, optparse.AmbiguousOptionError) as e:
-                largs.append(e.opt_str)
-
-
 class KernelCheck:
 
     def __init__(self):
-        self.parser = Parser()
-        self.parser.add_option("--ck", default="", type="string")
-        self.args = self.parser.parse_args()[0]
+        self._args = None
+        if __name__ == "__main__":
+            self._parseOpts()
+
         kernel_config_file = self._getConfigFile()
         if not kernel_config_file:
             log.error(
@@ -43,6 +35,11 @@ class KernelCheck:
         else:
             with open(kernel_config_file) as f:
                 self._config_file = f.readlines()
+
+    def _parseOpts(self): 
+        parser = helpers.Parser()
+        parser.add_option("--ck", default="", type="string")
+        self._args = parser.parse_args()[0]
 
     def _getConfigFile(self) -> str:
         # On some distros the config file can also be found on /usr/src/linux but as long as
@@ -57,8 +54,8 @@ class KernelCheck:
         f_list = ["/proc/config", "/proc/config.gz", "/boot/config-{}".format(r),
                   "/etc/kernels/kernel-config-{}-{}".format(m, r)]
 
-        if self.args.ck:
-            f_list.insert(0, self.args.ck)
+        if self._args:
+            f_list.insert(0, self._args.ck)
 
         for f in f_list:
             if os.path.isfile(f):
