@@ -40,7 +40,10 @@ def getCheckers(class_obj, name) -> dict:
 
 class Config:
     def __init__(self, name, obj):
-        self._config_file = "/etc/schopenhauer.yaml"
+        parser = Parser()
+        parser.add_option("-c", default="/etc/schopenhauer.yaml", type="string")
+        args = parser.parse_args()[0]
+        self._config_file = args.c
         self._configuration = {}
         try:
             with open(self._config_file, "r") as f:
