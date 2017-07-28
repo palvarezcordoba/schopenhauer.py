@@ -1,6 +1,5 @@
 import logging
 import helpers
-from sysctl import sysctl
 
 CHECKER_NAME = "TCP/IP"
 
@@ -11,7 +10,7 @@ log = logging.getLogger(CHECKER_NAME)
 class TCPIP:
 
     def __init__(self):
-        self.sysctl = sysctl()
+        self.sysctl = helpers.Sysctl()
 
     def syncCookies(self):
         if not int(self.sysctl.read("net.ipv4.tcp_syncookies")):

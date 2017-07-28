@@ -5,6 +5,12 @@ import inspect
 import yaml
 
 
+class Sysctl:
+    def read(self, key):
+        with open("/proc/sys/%s" % key.replace(".", "/")) as f:
+            value = f.readline().strip()
+        return value
+
 class Parser(optparse.OptionParser):
     def _process_args(self, largs, rargs, values):
         while rargs:

@@ -7,7 +7,6 @@ import platform
 import gzip
 
 import helpers
-from sysctl import sysctl
 
 
 CHECKER_NAME = "KERNEL"
@@ -36,7 +35,7 @@ class KernelCheck:
             with open(kernel_config_file) as f:
                 self._config_file = f.readlines()
 
-    def _parseOpts(self): 
+    def _parseOpts(self):
         parser = helpers.Parser()
         parser.add_option("--ck", default="", type="string")
         self._args = parser.parse_args()[0]
@@ -97,7 +96,7 @@ class KernelCheck:
             log.error("Enable static usermode helper.")
 
     def dmesgRestricted(self):
-        s = sysctl()
+        s = helpers.Sysctl()
         if not int(s.read("kernel.dmesg_restrict")):
             log.error("Set kernel.dmesg_restrict to 1.")
 
