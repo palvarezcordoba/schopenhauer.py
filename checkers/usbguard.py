@@ -9,9 +9,6 @@ log = logging.getLogger(CHECKER_NAME)
 
 
 class USBGuard:
-    
-    def __init__(self, args):
-        pass
 
     def checkUSBGuardIsInstalled(self):
         try:
@@ -24,10 +21,10 @@ def makes_sense() -> bool:
     return True
 
 
-def run(args=None):
-    checker = USBGuard(args)
+def run():
+    checker = USBGuard()
 
-    c = helpers.getCheckers(USBGuard, CHECKER_NAME, args)
+    c = helpers.getCheckers(USBGuard, CHECKER_NAME)
     for name in sorted(c):
         getattr(checker, name)()
 

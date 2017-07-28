@@ -4,8 +4,6 @@ BIND9:
   checkUser: true
 COREDUMP:
   check_core_dump: true
-HIDEPID:
-  checkHidePID: true
 KERNEL:
   dmesgRestricted: true
   hardenedMemCopies: true
