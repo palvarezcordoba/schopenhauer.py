@@ -18,6 +18,7 @@ log = logging.getLogger(CHECKER_NAME)
 class KernelCheck:
 
     def __init__(self):
+        self._args = None
         self._parseOpts()
 
         kernel_config_file = self._getConfigFile()
