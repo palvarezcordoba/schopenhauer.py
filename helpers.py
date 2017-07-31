@@ -53,8 +53,8 @@ class Config:
         self._configuration = {}
         try:
             with open(self._config_file, "r") as f:
-                self._configuration[name] = yaml.load(f.read())
-                #self._configuration = self._configuration[name]
+                self._configuration = yaml.load(f.read())
+                self._configuration = self._configuration[name]
         except:
             with open(self._config_file, "w+") as f:
                 self._configuration[name] = {}
