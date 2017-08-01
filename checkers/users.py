@@ -4,6 +4,8 @@
 
 import pwd
 import spwd
+import os
+
 import logging
 import helpers
 
@@ -27,6 +29,12 @@ class UsersCheck(object):
         d = spwd.getspnam("root")
         if d.sp_expire == -1:
             log.error("Enable expiration of users")
+
+    def umask(self):
+        with os.popen("umask") as p:
+            val = p.read()
+        if val[1:] != "77":
+            log.error("umask should be more restrictive (ie: 077)")
 
 
 def makes_sense() -> bool:
