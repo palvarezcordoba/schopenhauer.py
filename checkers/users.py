@@ -2,7 +2,6 @@
 
 #!/usr/bin/env python3
 
-import os
 import pwd
 import spwd
 import logging
