@@ -65,7 +65,7 @@ class KernelCheck:
                 return True
 
         return False
-
+    
     def heapRandomization(self):
         if self._isYes("COMPAT_BRK"):
             log.error("Heap randomization is disabled. Enable it")
@@ -82,7 +82,7 @@ class KernelCheck:
         if self._isYes("MODIFY_LDT_SYSCALL"):
             log.error("Disable TLD modify feature")
 
-    def restrictDmesg(self):
+    def dmesgRestricted(self):
         if not self._isYes("SECURITY_DMESG_RESTRICT"):
             log.error("Restrict access to dmesg logs to avoid information leaks")
 
@@ -93,11 +93,6 @@ class KernelCheck:
     def staticUsermodeHelper(self):
         if not self._isYes("STATIC_USERMODEHELPER"):
             log.error("Enable static usermode helper.")
-
-    def dmesgRestricted(self):
-        s = helpers.Sysctl()
-        if not int(s.read("kernel.dmesg_restrict")):
-            log.error("Set kernel.dmesg_restrict to 1.")
 
 
 def makes_sense() -> bool:
