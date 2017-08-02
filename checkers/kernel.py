@@ -23,9 +23,8 @@ class KernelCheck:
 
         kernel_config_file = self._getConfigFile()
         if not kernel_config_file:
-            log.error(
+            raise Exception(
                 "Can not found kernel configuration file. These test will not run")
-            return
 
         if kernel_config_file.endswith(".gz"):
             with gzip.open(kernel_config_file) as f:
@@ -100,11 +99,14 @@ def makes_sense() -> bool:
 
 
 def run():
-    checker = KernelCheck()
+    try:
+        checker = KernelCheck()
 
-    c = helpers.getCheckers(KernelCheck, CHECKER_NAME)
-    for name in sorted(c):
-        getattr(checker, name)()
+        c = helpers.getCheckers(KernelCheck, CHECKER_NAME)
+        for name in sorted(c):
+            getattr(checker, name)()
+    except Exception as ex:
+        log.exception(ex)
 
 
 if __name__ == "__main__":
