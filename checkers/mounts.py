@@ -20,8 +20,7 @@ class MountCheck:
             if i[1] == "/tmp":
                 if not "noexec" in i[3] or "nosuid" not in i[3] \
                         or "nodev" not in i[3]:
-                    log.error("/tmp mountpoint should have noexec, nosuid and"
-                              " nodev options.")
+                    log.error("/tmp mountpoint should have noexec and nosuid options.")
                     return
         log.error(
             "/tmp should be separated and have noexec, nosuid and nodev options.")
@@ -34,7 +33,7 @@ class MountCheck:
 
     def tmpfs(self):
         for i in self._partitions:
-            if i[0] == "tmpfs":
+            if i[0] == "tmpfs" and i[0] != "/tmp":
                 if "nosuid" not in i[3] or "nodev" not in i[3]:
                     log.error(
                         "{} should have nosuid and nodev options.".format(i[1]))
