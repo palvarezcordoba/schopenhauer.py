@@ -18,8 +18,11 @@ class USBGuard:
 
 
 def makes_sense() -> bool:
-    return True
-
+    try:
+        os.stat("/sys/bus/usb")
+        return True
+    except:
+        return False
 
 def run():
     checker = USBGuard()
