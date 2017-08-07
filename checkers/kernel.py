@@ -14,49 +14,23 @@ CHECKER_NAME = "KERNEL"
 logging.basicConfig(format="[%(name)s] %(message)s")
 log = logging.getLogger(CHECKER_NAME)
 
+parser = helpers.Parser()
+parser.add_option("--ck", default="", type="string")
+args = parser.parse_args()[0]
+
 
 class KernelCheck:
 
-    def __init__(self):
-        self._args = None
-        self._parseOpts()
+    def __init__(self, config):
+        if not config:
+            raise Exception("Kernel configuration not found.")
 
-        kernel_config_file = self._getConfigFile()
-        if not kernel_config_file:
-            raise Exception(
-                "Can not found kernel configuration file. These test will not run")
-
-        if kernel_config_file.endswith(".gz"):
-            with gzip.open(kernel_config_file) as f:
+        if config.endswith(".gz"):
+            with gzip.open(config) as f:
                 self._config_file = f.readlines()
         else:
-            with open(kernel_config_file) as f:
+            with open(config) as f:
                 self._config_file = f.readlines()
-
-    def _parseOpts(self):
-        parser = helpers.Parser()
-        parser.add_option("--ck", default="", type="string")
-        self._args = parser.parse_args()[0]
-
-    def _getConfigFile(self) -> str:
-        # On some distros the config file can also be found on /usr/src/linux but as long as
-        # we can not ensure it is the current config file is better to avoid
-        # it.
-
-        # In case that no config file is found we can try to dynamically test if some protections
-        # are really enabled
-
-        r = platform.release()
-        m = platform.machine()
-        f_list = ["/proc/config", "/proc/config.gz", "/boot/config-{}".format(r),
-                  "/etc/kernels/kernel-config-{}-{}".format(m, r)]
-
-        if self._args:
-            f_list.insert(0, self._args.ck)
-
-        for f in f_list:
-            if os.path.isfile(f):
-                return f
 
     def _isYes(self, opt):
         for l in self._config_file:
@@ -94,13 +68,33 @@ class KernelCheck:
             log.error("Enable static usermode helper.")
 
 
+def get_config_file() -> str:
+    # On some distros the config file can also be found on /usr/src/linux but as long as
+    # we can not ensure it is the current config file is better to avoid
+    # it.
+
+    # In case that no config file is found we can try to dynamically test if some protections
+    # are really enabled
+
+    r = platform.release()
+    m = platform.machine()
+    f_list = ["/proc/config", "/proc/config.gz", "/boot/config-{}".format(r),
+              "/etc/kernels/kernel-config-{}-{}".format(m, r)]
+
+    if args:
+        f_list.insert(0, args.ck)
+
+    for f in f_list:
+        if os.path.isfile(f):
+            return f
+        
 def makes_sense() -> bool:
-    return platform.system() == "Linux"
+    return platform.system() == "Linux" and get_config_file() != None
 
 
 def run():
     try:
-        checker = KernelCheck()
+        checker = KernelCheck(get_config_file())
 
         c = helpers.getCheckers(KernelCheck, CHECKER_NAME)
         for name in sorted(c):
