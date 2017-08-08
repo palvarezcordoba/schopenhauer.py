@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import logging
+
 import helpers
 
 
@@ -19,7 +21,7 @@ class CheckerClass:
 
 
 # return True if it the service/platform are found and it makes sense to run
-def make_sense() -> bool:
+def makes_sense() -> bool:
     return True
 
 
