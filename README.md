@@ -1,3 +1,3 @@
 Schopenhauer.py
 ===================
-Python3 script to check if SSH server is hardened.
+script to help to improve security of a system.
