@@ -12,6 +12,8 @@ CHECKER_NAME = "SSH"
 logging.basicConfig(format="[%(name)s] %(message)s")
 log = logging.getLogger(CHECKER_NAME)
 
+report = helpers.Report(CHECKER_NAME)
+
 
 algorithm_blacklist = """
 ecdh-sha2-nistp256 weak eliptic curves
@@ -51,41 +53,41 @@ class SSHCheck(object):
 
     def root(self):
         if self._sshd["permitrootlogin"] != "no":
-            log.error("Disable root login.")
+            report.new_issue("Disable root login.")
 
     def port(self):
         if self._sshd['port'] == '22':
-            log.error("Port number should not be the default (22).")
+            report.new_issue("Port number should not be the default (22).")
 
     def logingracetime(self):
         if int(self._sshd["logingracetime"]) > 25:
-            log.error(
+            report.new_issue(
                 "LoginGraceTime is very high.")
 
     def passauthentication(self):
         if self._sshd["passwordauthentication"] == 'yes' or self._sshd["challengeresponseauthentication"] == 'yes':
-            log.error("Disable keyboard-interactive and use ssh keys instead (or combine it, for example ssh keys + OTP codes). Make sure than PasswordAuthentication and ChallengeResponseAuthentication is both disabled.")
+            report.new_issue("Disable keyboard-interactive and use ssh keys instead (or combine it, for example ssh keys + OTP codes). Make sure than PasswordAuthentication and ChallengeResponseAuthentication is both disabled.")
 
     def TFA(self):
         with open("/etc/pam.d/sshd", 'r') as f:
             sshd_pam = f.read()
         if not re.match("\s*auth\s*required\s*pam_google_authenticator.so*", sshd_pam):
-            log.error("It is recommended use 2FA.")
+            report.new_issue("It is recommended use 2FA.")
             return 0
         opt_or_suff = re.match(
             "\s*auth\s*(optional|sufficient)\s*pam_google_authenticator.so*", sshd_pam)
         if opt_or_suff is not None:
-            log.error(
+            report.new_issue(
                 "Not use {} option in /etc/pam.d/sshd.".format(opt_or_suff.group()))
 
     def login_filter(self):
         if not ("allowusers" in self._sshd.getOptions()) or ("allowgroups" in self._sshd.getOptions()):
-            log.error(
+            report.new_issue(
                 "Filter users/groups with AllowUSers, and/or, AllowGroups.")
 
     def subsystem(self):
         if "subsystem" in self._sshd.getOptions():
-            log.error("If you do not really need {} disable it.".format(
+            report.new_issue("If you do not really need {} disable it.".format(
                 self._sshd["subsystem"]))
 
     def algorithm(self):
@@ -94,13 +96,13 @@ class SSHCheck(object):
             for x in self._sshd.conf:
                 if len(x) > 1:
                     if item_cleared[0] in x[1]:
-                        log.error(
+                        report.new_issue(
                             "{} - {}".format(item_cleared[0], item_cleared[1][:-1]))
                         break
 
     def fail2ban(self):
         if not path.exists("/usr/bin/fail2ban-server"):
-            log.error("Fail2ban not installed.")
+            report.new_issue("Fail2ban not installed.")
 
 
 def makes_sense() -> bool:

@@ -9,6 +9,8 @@ CHECKER_NAME = "MOUNT"
 logging.basicConfig(format="[%(name)s] %(message)s")
 log = logging.getLogger(CHECKER_NAME)
 
+report = helpers.Report(CHECKER_NAME)
+
 
 class MountCheck:
 
@@ -20,29 +22,29 @@ class MountCheck:
             if i[1] == "/tmp":
                 if not "noexec" in i[3] or "nosuid" not in i[3] \
                         or "nodev" not in i[3]:
-                    log.error("/tmp mountpoint should have noexec and nosuid options.")
+                    report.new_issue("/tmp mountpoint should have noexec and nosuid options.")
                     return
-        log.error(
+        report.new_issue(
             "/tmp should be separated and have noexec, nosuid and nodev options.")
 
     def home(self):
         for i in self._partitions:
             if i[1] == "/home":
                 return
-        log.error("/home should be separated.")
+        report.new_issue("/home should be separated.")
 
     def tmpfs(self):
         for i in self._partitions:
             if i[0] == "tmpfs" and i[0] != "/tmp":
                 if "nosuid" not in i[3] or "nodev" not in i[3]:
-                    log.error(
+                    report.new_issue(
                         "{} should have nosuid and nodev options.".format(i[1]))
 
     def usage(self):
         for partition in psutil.disk_partitions():
             usage = psutil.disk_usage(partition[1])[-1]
             if usage >= 90:
-                log.error("Usage of {}: {}%".format(partition[1], usage))
+                report.new_issue("Usage of {}: {}%".format(partition[1], usage))
 
 
 def makes_sense() -> bool:

@@ -14,6 +14,8 @@ CHECKER_NAME = "KERNEL"
 logging.basicConfig(format="[%(name)s] %(message)s")
 log = logging.getLogger(CHECKER_NAME)
 
+report = helpers.Report(CHECKER_NAME)
+
 parser = helpers.Parser()
 parser.add_option("--ck", default="", type="string")
 args = parser.parse_args()[0]
@@ -41,31 +43,31 @@ class KernelCheck:
     
     def heapRandomization(self):
         if self._isYes("COMPAT_BRK"):
-            log.error("Heap randomization is disabled. Enable it")
+            report.new_issue("Heap randomization is disabled. Enable it")
 
     def stackProtector(self):
         if self._isYes("CC_STACKPROTECTOR_NONE"):
-            log.error("Stack protector is completely disabled. Enable it")
+            report.new_issue("Stack protector is completely disabled. Enable it")
 
     def legacyvsyscall(self):
         if not self._isYes("LEGACY_VSYSCALL_NONE"):
-            log.error("Disable legacy vsyscall table")
+            report.new_issue("Disable legacy vsyscall table")
 
     def modifyTLD(self):
         if self._isYes("MODIFY_LDT_SYSCALL"):
-            log.error("Disable TLD modify feature")
+            report.new_issue("Disable TLD modify feature")
 
     def dmesgRestricted(self):
         if not self._isYes("SECURITY_DMESG_RESTRICT"):
-            log.error("Restrict access to dmesg logs to avoid information leaks")
+            report.new_issue("Restrict access to dmesg logs to avoid information leaks")
 
     def hardenedMemCopies(self):
         if not self._isYes("HARDENED_USERCOPY"):
-            log.error("Enable hardened memory copies to/from the kernel")
+            report.new_issue("Enable hardened memory copies to/from the kernel")
 
     def staticUsermodeHelper(self):
         if not self._isYes("STATIC_USERMODEHELPER"):
-            log.error("Enable static usermode helper.")
+            report.new_issue("Enable static usermode helper.")
 
 
 def get_config_file() -> str:

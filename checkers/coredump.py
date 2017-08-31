@@ -8,12 +8,14 @@ CHECKER_NAME = "COREDUMP"
 logging.basicConfig(format="[%(name)s] %(message)s")
 log = logging.getLogger(CHECKER_NAME)
 
+report = helpers.Report(CHECKER_NAME)
+
 
 class CoreDump:
 
     def check_core_dump(self):
         if os.popen("ulimit -c").read() != "0\n":
-            log.error(
+            report.new_issue(
                 "It's recomended to disable core dumps to avoid information leakeage")
 
 

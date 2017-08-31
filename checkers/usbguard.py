@@ -1,11 +1,14 @@
 import logging
 import os
+
 import helpers
 
 CHECKER_NAME = "USBGUARD"
 
 logging.basicConfig(format="[%(name)s] %(message)s")
 log = logging.getLogger(CHECKER_NAME)
+
+report = helpers.Report(CHECKER_NAME)
 
 
 class USBGuard:
@@ -14,7 +17,7 @@ class USBGuard:
         try:
             os.stat("/usr/bin/usbguard")
         except FileNotFoundError:
-            log.error("usbguard is not installed.")
+            report.new_issue("usbguard is not installed.")
 
 
 def makes_sense() -> bool:

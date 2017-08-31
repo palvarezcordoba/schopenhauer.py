@@ -12,6 +12,7 @@ CHECKER_NAME = "IPTABLES"
 logging.basicConfig(format="[%(name)s] %(message)s")
 log = logging.getLogger(CHECKER_NAME)
 
+report = helpers.Report(CHECKER_NAME)
 
 class IptablesCheck:
 
@@ -28,7 +29,7 @@ class IptablesCheck:
 
     def used(self):
         if not self._used:        
-            log.error("Iptables are not used")
+            report.new_issue("Iptables are not used")
 
 
 # return True if it the service/platform are found and it makes sense to run

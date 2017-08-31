@@ -11,6 +11,7 @@ CHECKER_NAME = "HIDEPID"
 logging.basicConfig(format="[%(name)s] %(message)s")
 log = logging.getLogger(CHECKER_NAME)
 
+report = helpers.Report(CHECKER_NAME)
 
 class HidePID:
 
@@ -19,7 +20,7 @@ class HidePID:
             if mountpoint.mountpoint == "/proc":
                 if "hidepid" not in mountpoint.opts \
                         or "hidepid=0" in mountpoint.opts:
-                    log.error("Set hidepid mount option on /proc.")
+                    report.new_issue("Set hidepid mount option on /proc.")
 
 
 def makes_sense() -> bool:

@@ -3,7 +3,10 @@
 import optparse
 import inspect
 import yaml
+import colorama
 
+
+colorama.init()
 
 class Sysctl:
     def read(self, key):
@@ -42,6 +45,18 @@ def getCheckers(class_obj, name) -> dict:
             checkers[name] = m[1]
 
     return checkers
+
+class Report(object):
+    def __init__(self, name):
+        self._checker_name = name
+
+    def new_issue(self, message):
+
+        print(colorama.Fore.GREEN, end='')
+        print("[{}] ".format(self._checker_name), end='')
+        print(colorama.Fore.RED, end='')
+        print("{}".format(message))
+        print(colorama.Style.RESET_ALL, end='', flush=True)
 
 
 class Config:
