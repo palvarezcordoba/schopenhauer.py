@@ -42,10 +42,10 @@ class UsersCheck(object):
     def check_home(self):
         root_home = os.stat("/root")
         users_homes = os.scandir("/home")
-        if stat.filemode(root_home.st_mode)[-6:] != '------':
+        if root_home.st_mode & 0b111111:
             report.new_issue("Wrong permissions of /root")
         for user_home in users_homes:
-            if user_home.is_dir() and stat.filemode(os.stat(user_home.path).st_mode)[-6:] != "------":
+            if user_home.is_dir() and os.stat(user_home.path).st_mode & 0b111111:
                 report.new_issue("Wrong permissions of {}".format(user_home.path))
 
 
