@@ -49,14 +49,14 @@ def getCheckers(class_obj, name) -> dict:
 class Report(object):
     def __init__(self, name):
         self._checker_name = name
+        print(colorama.Back.BLACK, end='')
 
     def new_issue(self, message):
-
         print(colorama.Fore.BLUE, end='')
         print("[{}] ".format(self._checker_name), end='')
         print(colorama.Fore.LIGHTRED_EX, end='')
-        print("{}".format(message))
-        print(colorama.Style.RESET_ALL, end='', flush=True)
+        print("{}".format(message), sep='')
+#        print(colorama.Style.RESET_ALL, end='', flush=True)
 
 
 class Config:
