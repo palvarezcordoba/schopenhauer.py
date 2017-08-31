@@ -54,7 +54,7 @@ class Report(object):
 
         print(colorama.Fore.BLUE, end='')
         print("[{}] ".format(self._checker_name), end='')
-        print(colorama.Fore.RED, end='')
+        print(colorama.Fore.LIGHTRED_EX, end='')
         print("{}".format(message))
         print(colorama.Style.RESET_ALL, end='', flush=True)
 
