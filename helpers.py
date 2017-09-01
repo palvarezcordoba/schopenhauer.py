@@ -52,12 +52,11 @@ class Report(object):
 
     def new_issue(self, message):
 
-        print(colorama.Fore.GREEN, end='')
+        print(colorama.Fore.BLUE, end='')
         print("[{}] ".format(self._checker_name), end='')
-        print(colorama.Style.RESET_ALL, end='', flush=True)
-#        print(colorama.Fore.RED, end='')
+        print(colorama.Fore.RED, end='')
         print("{}".format(message))
-#        print(colorama.Style.RESET_ALL, end='', flush=True)
+        print(colorama.Style.RESET_ALL, end='', flush=True)
 
 
 class Config:
