@@ -69,6 +69,10 @@ class KernelCheck:
         if not self._isYes("STATIC_USERMODEHELPER"):
             report.new_issue("Enable static usermode helper.")
 
+    def refcount(self):
+        if not self._isYes("REFCOUNT_FULL"):
+            report.new_issue("Enable full refcounting");
+
 
 def get_config_file() -> str:
     # On some distros the config file can also be found on /usr/src/linux but as long as
