@@ -71,7 +71,15 @@ class KernelCheck:
 
     def refcount(self):
         if not self._isYes("REFCOUNT_FULL"):
-            report.new_issue("Enable full refcounting");
+            report.new_issue("Enable full refcounting")
+
+    def fortify(self):
+        if not self._isYes("FORTIFY_SOURCE"):
+            report.new_issue("Enable fortify source")
+
+    def randstruct_plugin(self):
+        if not self._isYes("GCC_PLUGIN_RANDSTRUCT"):
+            report.new_issue("Enable randstruct GCC plugin")
 
 
 def get_config_file() -> str:
