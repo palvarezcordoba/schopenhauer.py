@@ -81,6 +81,10 @@ class KernelCheck:
         if not self._isYes("GCC_PLUGIN_RANDSTRUCT"):
             report.new_issue("Enable randstruct GCC plugin")
 
+    def hardenedSLABFreelist(self):
+        if not self._isYes("SLAB_FREELIST_HARDENED"):
+            report.new_issue("Enable SLUB freelist hardening")
+
 
 def get_config_file() -> str:
     # On some distros the config file can also be found on /usr/src/linux but as long as
